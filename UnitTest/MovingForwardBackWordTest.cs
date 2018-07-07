@@ -41,7 +41,7 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void CanMoveForward_WhenAt00FacingSouth_CoordinateXEquals0()
+        public void CanMoveBackwars_WhenAt00FacingEast_CoordinateXEquals99()
         {
             // arrange  
             var rover = new PlutoRover(0, 0, CardinalDirection.East);
