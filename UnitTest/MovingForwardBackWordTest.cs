@@ -10,7 +10,7 @@ namespace UnitTest
         public void CanMoveForwardOneField()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("F");
             //assert
@@ -21,7 +21,7 @@ namespace UnitTest
         public void CanMoveBackWardOneField()
         {
             // arrange  
-            var rover = new PlutoRover(0, 1, CardinalDirection.North);
+            var rover = new PlutoRover(0, 1, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("B");
             //assert

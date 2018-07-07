@@ -8,22 +8,22 @@ namespace Space
     /// It has position defined by ordered pair (x,y) Cartesian coordinate system which are properties CoordinateX, CoordinateY
     /// NOTE: Position can only be positive. Reason for this is that we are on surface which we transform to grid, so
     /// if our vehicle reaches the end of eny direction it will go back to beginning
-    /// As well it has Orientation which can be north, west, east, south defined by Property CardinalDirection
+    /// As well it has direction which can be north, west, east, south defined by Property CardinalDirection
     /// </summary>
     public class PlutoRover
     {
         /// <summary>
         /// In constructor we are setting default values for our rover. 
-        /// Default direction, and orientation is 0,0,N
         /// </summary>
         /// <param name="coordinateX"></param>
         /// <param name="coordinateY"></param>
         /// <param name="direction"></param>
-        public PlutoRover(uint coordinateX = 0, uint coordinateY = 0, CardinalDirection direction = CardinalDirection.North)
+        public PlutoRover(uint coordinateX, uint coordinateY, CardinalDirection direction, int[,] surface)
         {
             this.CoordinateX = coordinateX;
             this.CoordinateY = coordinateY;
             this.RoverDirection = direction;
+            this.Surface = surface;
         }
 
         /// <summary>
@@ -34,23 +34,40 @@ namespace Space
         {
             foreach (var command in commands)
             {
-                if (command == 'F')
+                if (ObstacleDetected == false)
                 {
-                    MoveForward();
-                }
-                else if (command == 'B')
-                {
-                    MoveBackWard();
-                }
-                //else we want to change direction of rover
-                else if(command == 'L' || command == 'R')
-                {
-                    ChangeDirection(command);
+                    if (command == 'F')
+                    {
+                        MoveForward();
+                    }
+                    else if (command == 'B')
+                    {
+                        MoveBackWard();
+                    }
+                    //else we want to change direction of rover
+                    else if (command == 'L' || command == 'R')
+                    {
+                        ChangeDirection(command);
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Command not supported");
+                    }
+
+                    // If we detected obstacle on current field 
+                    if (ObstacleDetected)
+                    {
+                        Console.WriteLine("Obstacle detected");
+                    }
                 }
                 else
                 {
-                    throw new NotSupportedException($"Command not supported");
+                    if (ObstacleDetected)
+                    {
+                        Console.WriteLine("Obstacle detected");
+                    }
                 }
+
             }
         }
         /// <summary>
@@ -62,7 +79,10 @@ namespace Space
             //NORTH: (x,y) => (x, y+1)
             if (this.RoverDirection == CardinalDirection.North)
             {
-                this.CoordinateY = this.CoordinateY + 1;
+                if (!IsObstacleOnField(this.CoordinateX, this.CoordinateY + 1))
+                {
+                    this.CoordinateY = this.CoordinateY + 1;
+                }
             }
             //EAST: (x,y) => (x+1)
             else if (this.RoverDirection == CardinalDirection.East)
@@ -90,7 +110,7 @@ namespace Space
             //NORTH: (x,y) => (x, y-1)
             if (this.RoverDirection == CardinalDirection.North)
             {
-                this.CoordinateY = this.CoordinateY -1;
+                this.CoordinateY = this.CoordinateY - 1;
             }
             //EAST: (x,y) => (x-1, y)
             else if (this.RoverDirection == CardinalDirection.East)
@@ -123,7 +143,7 @@ namespace Space
                 if (this.RoverDirection + 1 > CardinalDirection.West)
                 {
                     this.RoverDirection = CardinalDirection.North;
-                 }
+                }
                 else
                 {
                     this.RoverDirection = this.RoverDirection + 1;
@@ -151,8 +171,17 @@ namespace Space
         /// </summary>
         public string GetRoverCoordinatesAndDirection() => $"{this.CoordinateX}{this.CoordinateY}{this.RoverDirection}";
 
+        /// <summary>
+        /// Check is there obstacle on surface field. On every check we update variable obstacle detected
+        /// </summary>
+        /// <param name="coordinateX"></param>
+        /// <param name="coordinateY"></param>
+        /// <returns></returns>
+        private bool IsObstacleOnField(uint coordinateX, uint coordinateY) => ObstacleDetected = Surface[coordinateX, coordinateY] == 1;
         private uint CoordinateX { get; set; }
         private uint CoordinateY { get; set; }
         public CardinalDirection RoverDirection { get; private set; }
+        private int[,] Surface { get; set; }
+        public bool ObstacleDetected { get; private set; }
     }
 }

@@ -6,11 +6,12 @@ namespace UnitTest
     [TestClass]
     public class RotatingRoverTest
     {
+        public void InitTest() { }
         [TestMethod]
         public void CanRotateRight_WhenDirectionIsNorth_OrientationShouldBeEast()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100] );
             //act
             rover.MakeCommand("R");
             //assert
@@ -22,7 +23,7 @@ namespace UnitTest
         public void CanRotateLeft_WhenDirectionIsNorth_OrientationShouldBeEast()
         {
             // arrange  
-            var rover = new Space.PlutoRover(0, 0, CardinalDirection.North);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("L");
             //assert
@@ -30,10 +31,10 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void CanRotateClockWise_WhenDirectionIsNorth_OrientationShouldBeNorth()
+        public void CanRotateFullClockWise_WhenDirectionIsNorth_OrientationShouldBeNorth()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("RRRR");
             //assert
@@ -41,10 +42,10 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void CanRotateCounterClockWise_WhenDirectionIsNorth_OrientationShouldBeNorth()
+        public void CanRotateFullCounterClockWise_WhenDirectionIsNorth_OrientationShouldBeNorth()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("LLLL");
             //assert

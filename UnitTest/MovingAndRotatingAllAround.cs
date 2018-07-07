@@ -11,7 +11,7 @@ namespace UnitTest
         public void CanMoveAndRotateAllAround()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("FFRFF");
             //assert
@@ -19,12 +19,42 @@ namespace UnitTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException), "Command not supported")]
-
-        public void CanMoveAllAround_WhenCommandNotRecognized_ShouldThrowException()
+        public void TryMoveOneField_WhenObstacleOnThatField_ShouldReportIt()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            var surface = new int[100, 100];
+            // put obstacle on field 0, 1 
+            surface[0, 1] = 1; 
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, surface);
+            //act
+            rover.MakeCommand("F");
+            //assert
+            Assert.AreEqual("00North", rover.GetRoverCoordinatesAndDirection());
+            Assert.IsTrue(rover.ObstacleDetected);
+        }
+
+        [TestMethod]
+        public void TryMoveTwoField_WhenObstacleOnSecondField_CanMoveOneFieldAndReportObstacle()
+        {
+            // arrange  
+            var surface = new int[100, 100];
+            // put obstacle on field 0, 1 
+            surface[0, 2] = 1;
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, surface);
+            //act
+            rover.MakeCommand("FF");
+            //assert
+            Assert.AreEqual("01North", rover.GetRoverCoordinatesAndDirection());
+            Assert.IsTrue(rover.ObstacleDetected);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException), "Command not supported")]
+
+        public void CanMoveAllAround_WhenCommandNotSupported_ShouldThrowException()
+        {
+            // arrange  
+            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
             //act
             rover.MakeCommand("MickeyMouse");
         }
