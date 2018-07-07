@@ -39,5 +39,16 @@ namespace UnitTest
             //assert
             Assert.AreEqual(CardinalDirection.North, rover.RoverDirection);
         }
+
+        [TestMethod]
+        public void CanRotateCounterClockWise_WhenDirectionIsNorth_OrientationShouldBeNorth()
+        {
+            // arrange  
+            var rover = new Space.PlutoRover(0, 0, CardinalDirection.North);
+            //act
+            rover.MakeCommand("LLLL");
+            //assert
+            Assert.AreEqual(CardinalDirection.North, rover.RoverDirection);
+        }
     }
 }
