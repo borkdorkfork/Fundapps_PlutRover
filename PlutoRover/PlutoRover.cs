@@ -18,12 +18,12 @@ namespace Space
         /// <param name="coordinateX"></param>
         /// <param name="coordinateY"></param>
         /// <param name="direction"></param>
-        public PlutoRover(uint coordinateX, uint coordinateY, CardinalDirection direction, int[,] surface)
+        public PlutoRover(uint coordinateX, uint coordinateY, CardinalDirection direction)
         {
             this.CoordinateX = coordinateX;
             this.CoordinateY = coordinateY;
             this.RoverDirection = direction;
-            this.Surface = surface;
+            this.Surface = new int[SURFACE_SIZE, SURFACE_SIZE];
         }
 
         /// <summary>
@@ -79,25 +79,34 @@ namespace Space
             //NORTH: (x,y) => (x, y+1)
             if (this.RoverDirection == CardinalDirection.North)
             {
-                if (!IsObstacleOnField(this.CoordinateX, this.CoordinateY + 1))
+                if (!IsObstacleOnField(this.CoordinateX, CalculateNextCoordinateY()))
                 {
-                    this.CoordinateY = this.CoordinateY + 1;
+                    this.CoordinateY = CalculateNextCoordinateY();
                 }
             }
             //EAST: (x,y) => (x+1)
             else if (this.RoverDirection == CardinalDirection.East)
             {
-                this.CoordinateX = this.CoordinateX + 1;
+                if (!IsObstacleOnField(CalculateNextCoordinateX(), this.CoordinateY))
+                {
+                    this.CoordinateX = CalculateNextCoordinateX();
+                }
             }
             //SOUTH: (x,y) => (x, y-1)
             else if (this.RoverDirection == CardinalDirection.South)
             {
-                this.CoordinateY = this.CoordinateY - 1;
+                if (!IsObstacleOnField(this.CoordinateX, CalculatePreviousCoordinateY()))
+                {
+                    this.CoordinateY = CalculatePreviousCoordinateY();
+                }
             }
             //WEST: (x,y) => (x-1, y)
             else if (this.RoverDirection == CardinalDirection.West)
             {
-                this.CoordinateX = this.CoordinateX - 1;
+                if (!IsObstacleOnField(CalculatePreviousCoordinateX(), this.CoordinateY))
+                {
+                    this.CoordinateX = this.CalculatePreviousCoordinateX();
+                }
             }
         }
 
@@ -110,22 +119,34 @@ namespace Space
             //NORTH: (x,y) => (x, y-1)
             if (this.RoverDirection == CardinalDirection.North)
             {
-                this.CoordinateY = this.CoordinateY - 1;
+                if (!IsObstacleOnField(this.CoordinateX, CalculatePreviousCoordinateY()))
+                {
+                    this.CoordinateY = CalculatePreviousCoordinateY();
+                }
             }
             //EAST: (x,y) => (x-1, y)
             else if (this.RoverDirection == CardinalDirection.East)
             {
-                this.CoordinateX = this.CoordinateX - 1;
+                if (!IsObstacleOnField(CalculatePreviousCoordinateX(), this.CoordinateY))
+                {
+                    this.CoordinateX = this.CalculatePreviousCoordinateX();
+                }
             }
             //SOUTH: (x,y) => (x, y+1)
             else if (this.RoverDirection == CardinalDirection.South)
             {
-                this.CoordinateY = this.CoordinateY + 1;
+                if (!IsObstacleOnField(this.CoordinateX, CalculateNextCoordinateY()))
+                {
+                    this.CoordinateY = CalculateNextCoordinateY();
+                }
             }
             //WEST: (x,y) => (x+1, y)
             else if (this.RoverDirection == CardinalDirection.West)
             {
-                this.CoordinateX = this.CoordinateX + 1;
+                if (!IsObstacleOnField(CalculateNextCoordinateX(), this.CoordinateY))
+                {
+                    this.CoordinateX = CalculateNextCoordinateX();
+                }
             }
         }
         /// <summary>
@@ -171,6 +192,12 @@ namespace Space
         /// </summary>
         public string GetRoverCoordinatesAndDirection() => $"{this.CoordinateX}{this.CoordinateY}{this.RoverDirection}";
 
+        private uint CalculateNextCoordinateX() => this.CoordinateX == SURFACE_SIZE-1 ? 0 :   (this.CoordinateX + 1);
+        private uint CalculateNextCoordinateY() => this.CoordinateY == SURFACE_SIZE-1 ? 0 : (this.CoordinateY + 1);
+        private uint CalculatePreviousCoordinateX() => this.CoordinateX == 0 ? SURFACE_SIZE-1 : this.CoordinateX -1;
+        private uint CalculatePreviousCoordinateY() => this.CoordinateY == 0 ? SURFACE_SIZE -1 : this.CoordinateY - 1;
+
+
         /// <summary>
         /// Check is there obstacle on surface field. On every check we update variable obstacle detected
         /// </summary>
@@ -178,10 +205,11 @@ namespace Space
         /// <param name="coordinateY"></param>
         /// <returns></returns>
         private bool IsObstacleOnField(uint coordinateX, uint coordinateY) => ObstacleDetected = Surface[coordinateX, coordinateY] == 1;
-        private uint CoordinateX { get; set; }
-        private uint CoordinateY { get; set; }
+        public uint CoordinateX { get; private set; }
+        public uint CoordinateY { get; private set; }
         public CardinalDirection RoverDirection { get; private set; }
-        private int[,] Surface { get; set; }
+        public int[,] Surface { get; set; }
         public bool ObstacleDetected { get; private set; }
+        public const uint SURFACE_SIZE = 100;
     }
 }

@@ -11,7 +11,7 @@ namespace UnitTest
         public void CanMoveAndRotateAllAround()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North);
             //act
             rover.MakeCommand("FFRFF");
             //assert
@@ -22,10 +22,8 @@ namespace UnitTest
         public void TryMoveOneField_WhenObstacleOnThatField_ShouldReportIt()
         {
             // arrange  
-            var surface = new int[100, 100];
-            // put obstacle on field 0, 1 
-            surface[0, 1] = 1; 
-            var rover = new PlutoRover(0, 0, CardinalDirection.North, surface);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            rover.Surface[0, 1] = 1;
             //act
             rover.MakeCommand("F");
             //assert
@@ -37,10 +35,8 @@ namespace UnitTest
         public void TryMoveTwoField_WhenObstacleOnSecondField_CanMoveOneFieldAndReportObstacle()
         {
             // arrange  
-            var surface = new int[100, 100];
-            // put obstacle on field 0, 1 
-            surface[0, 2] = 1;
-            var rover = new PlutoRover(0, 0, CardinalDirection.North, surface);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North);
+            rover.Surface[0, 2] = 1;
             //act
             rover.MakeCommand("FF");
             //assert
@@ -54,7 +50,7 @@ namespace UnitTest
         public void CanMoveAllAround_WhenCommandNotSupported_ShouldThrowException()
         {
             // arrange  
-            var rover = new PlutoRover(0, 0, CardinalDirection.North, new int[100, 100]);
+            var rover = new PlutoRover(0, 0, CardinalDirection.North);
             //act
             rover.MakeCommand("MickeyMouse");
         }
