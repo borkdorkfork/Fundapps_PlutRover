@@ -17,6 +17,7 @@ namespace UnitTest
             Assert.AreEqual(CardinalDirection.East, rover.RoverDirection);
         }
 
+
         [TestMethod]
         public void CanRotateLeft_WhenDirectionIsNorth_OrientationShouldBeEast()
         {
@@ -26,6 +27,17 @@ namespace UnitTest
             rover.MakeCommand("L");
             //assert
             Assert.AreEqual(CardinalDirection.West, rover.RoverDirection);
+        }
+
+        [TestMethod]
+        public void CanRotateClockWise_WhenDirectionIsNorth_OrientationShouldBeNorth()
+        {
+            // arrange  
+            var rover = new Space.PlutoRover(0, 0, CardinalDirection.North);
+            //act
+            rover.MakeCommand("RRRR");
+            //assert
+            Assert.AreEqual(CardinalDirection.North, rover.RoverDirection);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Space
     /// if our vehicle reaches the end of eny direction it will go back to beginning
     /// As well it has Orientation which can be north, west, east, south defined by Property CardinalDirection
     /// </summary>
-   public class PlutoRover
+    public class PlutoRover
     {
         /// <summary>
         /// In constructor we are setting default values for our rover. 
@@ -19,7 +19,7 @@ namespace Space
         /// <param name="coordinateX"></param>
         /// <param name="coordinateY"></param>
         /// <param name="direction"></param>
-        public PlutoRover(uint coordinateX=0, uint coordinateY=0, CardinalDirection direction= CardinalDirection.North)
+        public PlutoRover(uint coordinateX = 0, uint coordinateY = 0, CardinalDirection direction = CardinalDirection.North)
         {
             this.CoordinateX = coordinateX;
             this.CoordinateY = CoordinateY;
@@ -54,7 +54,7 @@ namespace Space
             //NORTH: (x,y) => (x, y+1)
             if (this.RoverDirection == CardinalDirection.North)
             {
-                this.CoordinateY = this.CoordinateY+1;
+                this.CoordinateY = this.CoordinateY + 1;
             }
             //EAST: (x,y) => (x+1)
             else if (this.RoverDirection == CardinalDirection.East)
@@ -72,7 +72,7 @@ namespace Space
                 this.CoordinateX = this.CoordinateX - 1;
             }
         }
-        
+
         /// <summary>
         /// Changing direction of rover
         /// </summary>
@@ -83,14 +83,23 @@ namespace Space
             // which means we have to add + 1 to our direction
             if (command == 'R')
             {
-                this.RoverDirection = this.RoverDirection + 1;
+                // If we are on the west and we want to move right expected direction should be North
+                // since West = 3 and adding + 1 to direction we would get 4 condition is required
+                if (this.RoverDirection + 1 > CardinalDirection.West)
+                {
+                    this.RoverDirection = CardinalDirection.North;
+                 }
+                else
+                {
+                    this.RoverDirection = this.RoverDirection + 1;
+                }
             }
             // else we want to move Left. 
             else
             {
-              //  If we are on the North and want to move left expected direction is West
+                //  If we are on the North and want to move left expected direction is West
                 // since North = 0 and North -1 would give us -1 we use condition to calculate West.
-                if (this.RoverDirection -1 < CardinalDirection.North)
+                if (this.RoverDirection - 1 < CardinalDirection.North)
                 {
                     this.RoverDirection = CardinalDirection.West;
                 }
