@@ -38,14 +38,18 @@ namespace Space
                 {
                     MoveForward();
                 }
-                if (command == 'B')
+                else if (command == 'B')
                 {
                     MoveBackWard();
                 }
                 //else we want to change direction of rover
-                else
+                else if(command == 'L' || command == 'R')
                 {
                     ChangeDirection(command);
+                }
+                else
+                {
+                    throw new NotSupportedException($"Command not supported");
                 }
             }
         }
