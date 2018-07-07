@@ -35,7 +35,14 @@ namespace Space
             foreach (var command in commands)
             {
                 if (command == 'F')
+                {
                     MoveForward();
+                }
+                //else we want to change direction of rover
+                else
+                {
+                    ChangeDirection(command);
+                }
             }
         }
         /// <summary>
@@ -67,12 +74,41 @@ namespace Space
         }
         
         /// <summary>
+        /// Changing direction of rover
+        /// </summary>
+        private void ChangeDirection(Char command)
+        {
+            // ENUMS in C#  by default have values 0, 1, 2, 3. In our case North= 0, East = 1, South = 2, West = 3
+            // so if we are for example on North and we Right expected direction is East 
+            // which means we have to add + 1 to our direction
+            if (command == 'R')
+            {
+                this.RoverDirection = this.RoverDirection + 1;
+            }
+            // else we want to move Left. 
+            else
+            {
+              //  If we are on the North and want to move left expected direction is West
+                // since North = 0 and North -1 would give us -1 we use condition to calculate West.
+                if (this.RoverDirection -1 < CardinalDirection.North)
+                {
+                    this.RoverDirection = CardinalDirection.West;
+                }
+                // if we are on East our direction = 1 and -1 would give as 0. Same goes for other direction
+                else
+                {
+                    this.RoverDirection = this.RoverDirection - 1;
+                }
+            }
+
+        }
+        /// <summary>
         /// Get rover coordinates and direction
         /// </summary>
         public string GetRoverCoordinatesAndDirection() => $"{this.CoordinateX}{this.CoordinateY}{this.RoverDirection}";
 
         private uint CoordinateX { get; set; }
         private uint CoordinateY { get; set; }
-        private CardinalDirection RoverDirection { get; set; }
+        public CardinalDirection RoverDirection { get; private set; }
     }
 }
