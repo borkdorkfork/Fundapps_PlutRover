@@ -22,7 +22,7 @@ namespace Space
         public PlutoRover(uint coordinateX = 0, uint coordinateY = 0, CardinalDirection direction = CardinalDirection.North)
         {
             this.CoordinateX = coordinateX;
-            this.CoordinateY = CoordinateY;
+            this.CoordinateY = coordinateY;
             this.RoverDirection = direction;
         }
 
@@ -37,6 +37,10 @@ namespace Space
                 if (command == 'F')
                 {
                     MoveForward();
+                }
+                if (command == 'B')
+                {
+                    MoveBackWard();
                 }
                 //else we want to change direction of rover
                 else
@@ -62,17 +66,44 @@ namespace Space
                 this.CoordinateX = this.CoordinateX + 1;
             }
             //SOUTH: (x,y) => (x, y-1)
-            if (this.RoverDirection == CardinalDirection.South)
+            else if (this.RoverDirection == CardinalDirection.South)
             {
-                this.CoordinateY = this.CoordinateY + 1;
+                this.CoordinateY = this.CoordinateY - 1;
             }
             //WEST: (x,y) => (x-1, y)
-            if (this.RoverDirection == CardinalDirection.West)
+            else if (this.RoverDirection == CardinalDirection.West)
             {
                 this.CoordinateX = this.CoordinateX - 1;
             }
         }
 
+        /// <summary>
+        /// Move rover backward. Depending on direction rover can move either by X or by Y.
+        /// </summary>
+        private void MoveBackWard()
+        {
+            //Depending on orienatation and coordinates (x,y) rover moves accordingly
+            //NORTH: (x,y) => (x, y-1)
+            if (this.RoverDirection == CardinalDirection.North)
+            {
+                this.CoordinateY = this.CoordinateY -1;
+            }
+            //EAST: (x,y) => (x-1, y)
+            else if (this.RoverDirection == CardinalDirection.East)
+            {
+                this.CoordinateX = this.CoordinateX - 1;
+            }
+            //SOUTH: (x,y) => (x, y+1)
+            else if (this.RoverDirection == CardinalDirection.South)
+            {
+                this.CoordinateY = this.CoordinateY + 1;
+            }
+            //WEST: (x,y) => (x+1, y)
+            else if (this.RoverDirection == CardinalDirection.West)
+            {
+                this.CoordinateX = this.CoordinateX + 1;
+            }
+        }
         /// <summary>
         /// Changing direction of rover
         /// </summary>
